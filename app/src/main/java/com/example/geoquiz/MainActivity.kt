@@ -25,6 +25,7 @@ val questionList = listOf(
 fun QuizScreen() {
     var currentQuestionIndex by remember { mutableStateOf(0) }
     var score by remember { mutableStateOf(0) }
+    var isAnswered by remember { mutableStateOf(false) }
 
     val isQuizFinished = currentQuestionIndex >= questionList.size
 
@@ -38,21 +39,33 @@ fun QuizScreen() {
             val currentQuestion = questionList[currentQuestionIndex]
             Text(text = currentQuestion.text, fontSize = 18.sp, modifier = Modifier.padding(bottom = 24.dp))
 
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceEvenly
-            ) {
-                Button(onClick = {
-                    if (currentQuestion.answer) score++
-                    currentQuestionIndex++
-                }) {
-                    Text("TRUE")
+            if (!isAnswered) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceEvenly
+                ) {
+                    Button(onClick = {
+                        if (currentQuestion.answer) score++
+                        isAnswered = true
+                    }) {
+                        Text("TRUE")
+                    }
+                    Button(onClick = {
+                        if (!currentQuestion.answer) score++
+                        isAnswered = true
+                    }) {
+                        Text("FALSE")
+                    }
                 }
-                Button(onClick = {
-                    if (!currentQuestion.answer) score++
-                    currentQuestionIndex++
-                }) {
-                    Text("FALSE")
+            } else {
+                Button(
+                    onClick = {
+                        currentQuestionIndex++
+                        isAnswered = false
+                    },
+                    modifier = Modifier.align(Alignment.End)
+                ) {
+                    Text("NEXT")
                 }
             }
         } else {
@@ -62,8 +75,8 @@ fun QuizScreen() {
     }
 }
 
-@Preview(showBackground = true, name = "Шаг 3: Подсчет ответов")
+@Preview(showBackground = true, name = "Шаг 4: Кнопка NEXT")
 @Composable
-fun PreviewStep3() {
+fun PreviewStep4() {
     QuizScreen()
 }
