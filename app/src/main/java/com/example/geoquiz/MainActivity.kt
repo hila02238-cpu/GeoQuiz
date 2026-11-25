@@ -24,7 +24,7 @@ val questionList = listOf(
 @Composable
 fun QuizScreen() {
     var currentQuestionIndex by remember { mutableStateOf(0) }
-
+    var score by remember { mutableStateOf(0) }
 
     val isQuizFinished = currentQuestionIndex >= questionList.size
 
@@ -43,11 +43,13 @@ fun QuizScreen() {
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
                 Button(onClick = {
+                    if (currentQuestion.answer) score++
                     currentQuestionIndex++
                 }) {
                     Text("TRUE")
                 }
                 Button(onClick = {
+                    if (!currentQuestion.answer) score++
                     currentQuestionIndex++
                 }) {
                     Text("FALSE")
@@ -55,12 +57,13 @@ fun QuizScreen() {
             }
         } else {
             Text("Викторина завершена!", fontSize = 20.sp)
+            Text("Правильных ответов: $score", fontSize = 20.sp)
         }
     }
 }
 
-@Preview(showBackground = true, name = "Шаг 2: Кнопки")
+@Preview(showBackground = true, name = "Шаг 3: Подсчет ответов")
 @Composable
-fun PreviewStep2() {
+fun PreviewStep3() {
     QuizScreen()
 }
