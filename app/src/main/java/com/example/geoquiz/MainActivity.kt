@@ -1,17 +1,16 @@
 package com.example.geoquiz
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
+import androidx.compose.material3.Button
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
-
 data class Question(val text: String, val answer: Boolean)
-
 
 val questionList = listOf(
     Question("Canberra is the capital of Australia.", true),
@@ -22,20 +21,46 @@ val questionList = listOf(
     Question("Lake Baikal is the world's oldest and deepest freshwater lake.", true)
 )
 
-
 @Composable
 fun QuizScreen() {
-    val currentQuestionIndex = 0
-    val currentQuestion = questionList[currentQuestionIndex]
+    var currentQuestionIndex by remember { mutableStateOf(0) }
 
-    Column(modifier = Modifier.padding(16.dp)) {
+
+    val isQuizFinished = currentQuestionIndex >= questionList.size
+
+    Column(
+        modifier = Modifier.padding(16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
         Text(text = "GeoQuiz", fontSize = 24.sp, modifier = Modifier.padding(bottom = 24.dp))
-        Text(text = currentQuestion.text, fontSize = 18.sp)
+
+        if (!isQuizFinished) {
+            val currentQuestion = questionList[currentQuestionIndex]
+            Text(text = currentQuestion.text, fontSize = 18.sp, modifier = Modifier.padding(bottom = 24.dp))
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceEvenly
+            ) {
+                Button(onClick = {
+                    currentQuestionIndex++
+                }) {
+                    Text("TRUE")
+                }
+                Button(onClick = {
+                    currentQuestionIndex++
+                }) {
+                    Text("FALSE")
+                }
+            }
+        } else {
+            Text("Викторина завершена!", fontSize = 20.sp)
+        }
     }
 }
 
-@Preview(showBackground = true, name = "Шаг 1: Каркас")
+@Preview(showBackground = true, name = "Шаг 2: Кнопки")
 @Composable
-fun PreviewStep1() {
+fun PreviewStep2() {
     QuizScreen()
 }
